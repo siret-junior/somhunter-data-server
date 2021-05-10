@@ -188,8 +188,14 @@ def run(args):
         acceptableProtocols=[b'h2'],
     )
 
-    endpoint = endpoints.SSL4ServerEndpoint(reactor, args.port, options, backlog=128)
-    endpoint.listen(H2Factory(root))
+    try:
+        endpoint = endpoints.SSL4ServerEndpoint(reactor, args.port, options, backlog=128)
+        endpoint.listen(H2Factory(root))
+
+    except Exception as e:
+        print("Failed to run the server:")
+        print(e)
+        return
 
     print("Data server is listening at port '{}'...".format(args.port))
     reactor.run()
