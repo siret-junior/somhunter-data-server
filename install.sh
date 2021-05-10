@@ -1,7 +1,7 @@
 #!/bin/sh
 printf "\tInstalling 'somhunter-data-server'...\n"
 
-ABSOLUTE_PATH="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/"
+ABSOLUTE_PATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
 cd $ABSOLUTE_PATH # CD to script dir
 
 python -m pip install -r requirements.txt
