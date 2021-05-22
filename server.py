@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 """
 twisted-server.py
 ~~~~~~~~~~~~~~~~~
@@ -11,7 +10,7 @@ import argparse
 import functools
 import mimetypes
 import os.path
-import sys
+import json
 
 from OpenSSL import crypto
 from twisted.internet.defer import Deferred, inlineCallbacks
@@ -19,9 +18,7 @@ from twisted.internet.protocol import Protocol, Factory
 from twisted.internet import endpoints, reactor, ssl
 from h2.config import H2Configuration
 from h2.connection import H2Connection
-from h2.events import (
-    RequestReceived, DataReceived, WindowUpdated
-)
+from h2.events import (RequestReceived, DataReceived, WindowUpdated)
 from h2.exceptions import ProtocolError
 
 
@@ -80,9 +77,9 @@ class H2Protocol(Protocol):
                 ('content-length', '0'),
                 ('server', 'twisted-h2'),
             )
-            self.conn.send_headers(
-                stream_id, response_headers, end_stream=True
-            )
+            self.conn.send_headers(stream_id,
+                                   response_headers,
+                                   end_stream=True)
             self.transport.write(self.conn.data_to_send())
         else:
             self.sendFile(full_path, stream_id)
@@ -96,8 +93,7 @@ class H2Protocol(Protocol):
     def sendFile(self, file_path, stream_id):
         filesize = os.stat(file_path).st_size
         content_type, content_encoding = mimetypes.guess_type(
-            file_path.decode('utf-8')
-        )
+            file_path.decode('utf-8'))
         response_headers = [
             (':status', '200'),
             ('content-length', str(filesize)),
@@ -143,9 +139,8 @@ class H2Protocol(Protocol):
             while not self.conn.remote_flow_control_window(stream_id):
                 yield self.wait_for_flow_control(stream_id)
 
-            chunk_size = min(
-                self.conn.remote_flow_control_window(stream_id), READ_CHUNK_SIZE
-            )
+            chunk_size = min(self.conn.remote_flow_control_window(stream_id),
+                             READ_CHUNK_SIZE)
             data = file.read(chunk_size)
             keep_reading = len(data) == chunk_size
             self.conn.send_data(stream_id, data, not keep_reading)
@@ -172,6 +167,7 @@ class H2Factory(Factory):
     def buildProtocol(self, addr):
         return H2Protocol(self.root)
 
+
 def run(args):
     root = args.dir_to_serve.encode('utf-8')
 
@@ -189,7 +185,10 @@ def run(args):
     )
 
     try:
-        endpoint = endpoints.SSL4ServerEndpoint(reactor, args.port, options, backlog=128)
+        endpoint = endpoints.SSL4ServerEndpoint(reactor,
+                                                args.port,
+                                                options,
+                                                backlog=128)
         endpoint.listen(H2Factory(root))
 
     except Exception as e:
@@ -200,10 +199,34 @@ def run(args):
     print("Data server is listening at port '{}'...".format(args.port))
     reactor.run()
 
+
+def get_serve_dir():
+    with open("somhunter-core/config/config-core.json") as ifs:
+        config_core = json.load(ifs)
+
+        if (not "data_dir" in config_core["core"]):
+            raise Exception("'data_dir' key not found in core config!")
+
+        found_dir = os.path.join("somhunter-core",
+                                 config_core["core"]["data_dir"])
+        print("\tFound '{}'.".format(found_dir))
+        return found_dir
+
+
 def main(args):
     this_filepath = os.path.dirname(os.path.realpath(__file__))
     os.chdir(this_filepath)
-    os.chdir("..") # We need to run inside the root dir
+    os.chdir("..")  # CD to the global project root (`somhunter` directory)
+
+    cwd = os.getcwd()
+    print("(!!!)")
+    print("This script is running from the '{}' directory...".format(cwd))
+    print("(!!!)")
+
+    # If not specified, serve according to the config-core.json
+    if (args.dir_to_serve == None):
+        print("\tGetting serve directory from config-core.json...")
+        args.dir_to_serve = get_serve_dir()
 
     args.dir_to_serve = os.path.abspath(args.dir_to_serve)
     args.certfile = os.path.abspath(args.certfile)
@@ -215,18 +238,25 @@ def main(args):
     print("args.certfile = {}".format(args.certfile))
     print("args.keyfile = {}".format(args.keyfile))
     print("--------------------------------")
-    
-    os.chdir(args.dir_to_serve) # Change to serving dir
+
+    os.chdir(args.dir_to_serve)  # Change to serving dir
 
     # Run the server
     run(args)
 
+
 parser = argparse.ArgumentParser()
-parser.add_argument("dir_to_serve")
-parser.add_argument("--certfile", type=str, default="somhunter-core/config/cert/server.pem")
-parser.add_argument("--keyfile", type=str, default="somhunter-core/config/cert/server.key")
+parser.add_argument("--dir_to_serve",
+                    type=str,
+                    help="What directory this server will serve.")
+parser.add_argument("--certfile",
+                    type=str,
+                    default="somhunter-core/config/cert/server.pem")
+parser.add_argument("--keyfile",
+                    type=str,
+                    default="somhunter-core/config/cert/server.key")
 parser.add_argument("--port", type=str, default=8889)
-args = parser.parse_args()
 
 if __name__ == '__main__':
+    args = parser.parse_args()
     main(args)
