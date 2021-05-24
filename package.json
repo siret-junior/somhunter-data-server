@@ -1,0 +1,14 @@
+{
+  "name": "somhunter-data-server",
+  "version": "1.0.0",
+  "description": "Provides the shared data over the HTTP protocol",
+  "main": "estatic.js",
+  "scripts": {
+    "start": "node estatic.js"
+  },
+  "author": "",
+  "license": "GPLv2",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
