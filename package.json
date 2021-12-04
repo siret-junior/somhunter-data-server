@@ -1,13 +1,21 @@
 {
   "name": "somhunter-data-server",
-  "version": "1.0.0",
-  "description": "Provides the shared data over the HTTP protocol",
+  "version": "0.1.0",
+  "description": "Provides the shared media data over the HTTP(S) protocol.",
   "main": "estatic.js",
   "scripts": {
     "start": "node estatic.js"
   },
-  "author": "",
-  "license": "GPLv2",
+  "author": "František Mejzlík <frankmejzlik@gmail.com>",
+  "contributors": [
+    "Mirek Kratochvil <exa.exa@gmail.com>",
+    "Patrik Veselý <prtrikvesely@gmail.com>"
+  ],
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/siret-junior/somhunter-data-server"
+  },
+  "license": "GPL-2.0-only",
   "dependencies": {
     "estatic": "^0.2.6",
     "express": "^4.17.1"
