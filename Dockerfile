@@ -8,4 +8,4 @@ RUN apt-get install -yq --no-install-recommends nodejs npm > /dev/null
 
 WORKDIR /somhunter/somhunter-data-server
 
-EXPOSE 8081
+EXPOSE 8082
