@@ -5,6 +5,7 @@ const app = express();
 // ---
 const config_core = require("../somhunter-core/config/config-core.json");
 
+// Get the settings from the config file
 const data_dir = config_core.core.datasets.data_dir;
 const data_server_port = config_core.data_server.API.port;
 

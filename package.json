@@ -12,8 +12,8 @@
     "Patrik Veselý <prtrikvesely@gmail.com>"
   ],
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/siret-junior/somhunter-data-server"
+    "type": "git",
+    "url": "https://github.com/siret-junior/somhunter-data-server"
   },
   "license": "GPL-2.0-only",
   "dependencies": {
