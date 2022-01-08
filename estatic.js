@@ -13,6 +13,13 @@ const dir = path.join(__dirname, "../somhunter-core/", data_dir, "media");
 
 console.log("(!!!)\nRunning at directory: ", __dirname, "\n(!!!)");
 console.log("Serving the directory: ", dir);
+
+app.get('/frames', (err, res) => {
+	res.status(200);
+	res.json({ working: true });
+	res.end();
+});
+
 app.use(express.static(dir));
 
 app.listen(data_server_port, function () {
