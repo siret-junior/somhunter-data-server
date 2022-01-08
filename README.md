@@ -1,5 +1,5 @@
 # SOMHunter Data Server
-Serves the shared media over the HTTP protocol to SOMHunter Video Search Tool.
+Serves the shared media over the HTTP protocol. This is part of the [SOMHunter Video Search Tool](https://github.com/siret-junior/somhunter) project.
 
 Currently this server just provided thumbnails and frames of selected frames for the given dataset. The `somhunter-ui` project requests the media from this server.
 
