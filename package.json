@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node estatic.js"
   },
-  "author": "František Mejzlík <frankmejzlik@gmail.com>",
+  "author": "František Mejzlík <frankmejzlik@protonmail.com>",
   "contributors": [
     "Mirek Kratochvil <exa.exa@gmail.com>",
     "Patrik Veselý <prtrikvesely@gmail.com>"

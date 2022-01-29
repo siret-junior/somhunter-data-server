@@ -1,6 +1,6 @@
 /* This file is part of SOMHunter Data Server.
  *
- * Copyright (C) 2022    Frantisek Mejzlik <frankmejzlik@gmail.com>
+ * Copyright (C) 2022    Frantisek Mejzlik <frankmejzlik@protonmail.com>
  *                       Vit Skrhak <vitek.skrhak@seznam.cz>
  *                       Patrik Veselý <prtrikvesely@gmail.com>
  * 
